@@ -1,0 +1,147 @@
+layer {
+  name : "net_input"
+  type : "Input"
+  top: "net_input:0"
+  input_param {
+    shape {
+      dim: 1
+      dim: 1
+      dim: 32
+      dim: 32
+    }
+  }
+}
+layer {
+  name : "conv1/conv"
+  type : "Convolution"
+  bottom: "net_input:0"
+  top: "conv1/conv_out:0"
+  convolution_param {
+    num_output: 6
+    kernel_size_h: 5
+    kernel_size_w: 5
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "conv1/relu"
+  type : "ReLU"
+  bottom: "conv1/conv_out:0"
+  top: "conv1/relu:0"
+}
+layer {
+  name : "conv1/max_pool"
+  type : "Pooling"
+  bottom: "conv1/relu:0"
+  top: "conv1/max_pool:0"
+  pooling_param {
+    kernel_size_h: 2
+    kernel_size_w: 2
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    dilation_h: 1
+    dilation_w: 1
+    pool: MAX
+  }
+}
+layer {
+  name : "conv2/conv"
+  type : "Convolution"
+  bottom: "conv1/max_pool:0"
+  top: "conv2/conv_out:0"
+  convolution_param {
+    num_output: 16
+    kernel_size_h: 5
+    kernel_size_w: 5
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "conv2/relu"
+  type : "ReLU"
+  bottom: "conv2/conv_out:0"
+  top: "conv2/relu:0"
+}
+layer {
+  name : "conv2/max_pool"
+  type : "Pooling"
+  bottom: "conv2/relu:0"
+  top: "conv2/max_pool:0"
+  pooling_param {
+    kernel_size_h: 2
+    kernel_size_w: 2
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    dilation_h: 1
+    dilation_w: 1
+    pool: MAX
+  }
+}
+layer {
+  name : "fc1/dense"
+  type : "InnerProduct"
+  bottom: "conv2/max_pool:0"
+  top: "fc1/fc_out:0"
+  inner_product_param {
+    num_output: 120
+    bias_term: True
+  }
+}
+layer {
+  name : "fc1/relu"
+  type : "ReLU"
+  bottom: "fc1/fc_out:0"
+  top: "fc1/relu:0"
+}
+layer {
+  name : "fc2/dense"
+  type : "InnerProduct"
+  bottom: "fc1/relu:0"
+  top: "fc2/fc_out:0"
+  inner_product_param {
+    num_output: 84
+    bias_term: True
+  }
+}
+layer {
+  name : "fc2/relu"
+  type : "ReLU"
+  bottom: "fc2/fc_out:0"
+  top: "fc2/relu:0"
+}
+layer {
+  name : "fc3/dense"
+  type : "InnerProduct"
+  bottom: "fc2/relu:0"
+  top: "net_output:0"
+  inner_product_param {
+    num_output: 10
+    bias_term: True
+  }
+}

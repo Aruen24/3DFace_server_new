@@ -1,0 +1,1888 @@
+layer {
+  name : "Placeholder"
+  type : "Input"
+  top: "ToFloat:0"
+  input_param {
+    shape {
+      dim: 1
+      dim: 3
+      dim: 224
+      dim: 224
+    }
+  }
+}
+layer {
+  name : "truediv"
+  type : "Scale"
+  bottom: "ToFloat:0"
+  top: "standardize_input/sub:0"
+  scale_param {
+    bias_term: True
+  }
+}
+layer {
+  name : "ShuffleNetV2/Conv1/Conv2D"
+  type : "Convolution"
+  bottom: "standardize_input/sub:0"
+  top: "ShuffleNetV2/Conv1/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 1
+    pad_w: 0
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Conv1/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Conv1/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Conv1/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/MaxPool/MaxPool"
+  type : "Pooling"
+  bottom: "ShuffleNetV2/Conv1/Relu:0"
+  top: "ShuffleNetV2/MaxPool/MaxPool:0"
+  pooling_param {
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 1
+    pad_w: 0
+    pad_e: 1
+    dilation_h: 1
+    dilation_w: 1
+    pool: MAX
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_1/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/MaxPool/MaxPool:0"
+  top: "ShuffleNetV2/Stage2/unit_1/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_1/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_1/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_1/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_1/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_1/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage2/unit_1/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 1
+    pad_w: 0
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 24
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_1/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_1/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_1/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_1/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_1/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_1/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_1/second_branch/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/MaxPool/MaxPool:0"
+  top: "ShuffleNetV2/Stage2/unit_1/second_branch/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 1
+    pad_w: 0
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 24
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_1/second_branch/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_1/second_branch/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_1/second_branch/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_1/second_branch/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_1/second_branch/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_1/second_branch/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage2/unit_1/second_branch/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage2/unit_1/conv1x1_after/Relu:0"
+  top: "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 24
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_2/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage2/unit_2/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_2/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_2/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_2/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_2/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_2/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage2/unit_2/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 24
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_2/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_2/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_2/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_2/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_2/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_2/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage2/unit_2/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage2/unit_2/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 24
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_3/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage2/unit_3/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_3/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_3/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_3/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_3/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_3/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage2/unit_3/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 24
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_3/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_3/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_3/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_3/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_3/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_3/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage2/unit_3/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage2/unit_3/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 24
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_4/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage2/unit_4/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_4/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_4/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_4/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_4/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_4/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage2/unit_4/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 24
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_4/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/unit_4/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_4/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 24
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage2/unit_4/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage2/unit_4/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage2/unit_4/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage2/concat"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage2/unit_4/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage2/unit_4/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage2/concat:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_1/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/concat:0"
+  top: "ShuffleNetV2/Stage3/unit_1/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_1/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_1/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_1/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_1/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_1/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_1/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 1
+    pad_w: 0
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_1/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_1/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_1/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_1/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_1/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_1/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_1/second_branch/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage2/concat:0"
+  top: "ShuffleNetV2/Stage3/unit_1/second_branch/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 1
+    pad_w: 0
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_1/second_branch/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_1/second_branch/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_1/second_branch/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_1/second_branch/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_1/second_branch/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_1/second_branch/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage3/unit_1/second_branch/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage3/unit_1/conv1x1_after/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_2/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_2/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_2/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_2/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_2/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_2/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_2/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_2/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_2/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_2/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_2/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_2/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_2/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_2/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage3/unit_2/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage3/unit_2/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_3/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_3/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_3/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_3/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_3/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_3/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_3/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_3/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_3/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_3/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_3/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_3/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_3/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_3/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage3/unit_3/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage3/unit_3/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_4/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_4/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_4/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_4/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_4/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_4/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_4/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_4/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_4/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_4/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_4/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_4/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_4/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_4/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage3/unit_4/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage3/unit_4/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_5/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_5/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_5/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_5/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_5/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_5/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_5/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_5/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_5/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_5/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_5/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_5/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_5/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_5/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage3/unit_5/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage3/unit_5/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_6/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_6/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_6/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_6/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_6/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_6/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_6/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_6/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_6/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_6/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_6/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_6/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_6/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_6/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage3/unit_6/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage3/unit_6/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_7/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_7/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_7/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_7/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_7/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_7/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_7/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_7/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_7/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_7/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_7/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_7/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_7/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_7/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage3/unit_7/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage3/unit_7/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_8/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage3/unit_8/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_8/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_8/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_8/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_8/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_8/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage3/unit_8/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 48
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_8/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/unit_8/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_8/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 48
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage3/unit_8/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage3/unit_8/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage3/unit_8/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage3/concat"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage3/unit_8/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage3/unit_8/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage3/concat:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_1/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/concat:0"
+  top: "ShuffleNetV2/Stage4/unit_1/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_1/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_1/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_1/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_1/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_1/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage4/unit_1/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 1
+    pad_w: 0
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 96
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_1/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_1/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_1/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_1/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_1/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_1/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_1/second_branch/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage3/concat:0"
+  top: "ShuffleNetV2/Stage4/unit_1/second_branch/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 2
+    stride_w: 2
+    pad_n: 0
+    pad_s: 1
+    pad_w: 0
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 96
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_1/second_branch/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_1/second_branch/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_1/second_branch/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_1/second_branch/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_1/second_branch/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_1/second_branch/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage4/unit_1/second_branch/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage4/unit_1/conv1x1_after/Relu:0"
+  top: "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 96
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_2/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage4/unit_2/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_2/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_2/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_2/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_2/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_2/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage4/unit_2/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 96
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_2/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_2/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_2/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_2/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_2/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_2/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage4/unit_2/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage4/unit_2/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 96
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_3/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage4/unit_3/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_3/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_3/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_3/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_3/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_3/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage4/unit_3/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 96
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_3/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_3/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_3/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_3/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_3/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_3/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/stack"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage4/unit_3/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage4/unit_3/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/stack:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/transpose"
+  type : "ShuffleChannel"
+  bottom: "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/stack:0"
+  top: "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/Reshape:0"
+  shuffle_channel_param {
+    group: 2
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/split"
+  type : "Slice"
+  bottom: "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/Reshape:0"
+  top: "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/split:1"
+  slice_param {
+    axis: 1
+    slice_point: 96
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_4/conv1x1_before/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/split:0"
+  top: "ShuffleNetV2/Stage4/unit_4/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_4/conv1x1_before/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_4/conv1x1_before/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_4/conv1x1_before/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_4/depthwise/depthwise"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_4/conv1x1_before/Relu:0"
+  top: "ShuffleNetV2/Stage4/unit_4/depthwise/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 3
+    kernel_size_w: 3
+    stride_h: 1
+    stride_w: 1
+    pad_n: 1
+    pad_s: 1
+    pad_w: 1
+    pad_e: 1
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 96
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_4/conv1x1_after/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/unit_4/depthwise/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_4/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 96
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Stage4/unit_4/conv1x1_after/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Stage4/unit_4/conv1x1_after/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Stage4/unit_4/conv1x1_after/Relu:0"
+}
+layer {
+  name : "ShuffleNetV2/Stage4/concat"
+  type : "Concat"
+  bottom: "ShuffleNetV2/Stage4/unit_4/conv1x1_after/Relu:0"
+  bottom: "ShuffleNetV2/Stage4/unit_4/concat_shuffle_split/split:1"
+  top: "ShuffleNetV2/Stage4/concat:0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Conv5/Conv2D"
+  type : "Convolution"
+  bottom: "ShuffleNetV2/Stage4/concat:0"
+  top: "ShuffleNetV2/Conv5/batch_norm/FusedBatchNorm:0"
+  convolution_param {
+    num_output: 1024
+    kernel_size_h: 1
+    kernel_size_w: 1
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    bias_term: True
+    dilation_h: 1
+    dilation_w: 1
+    group: 1
+  }
+}
+layer {
+  name : "ShuffleNetV2/Conv5/Relu"
+  type : "ReLU"
+  bottom: "ShuffleNetV2/Conv5/batch_norm/FusedBatchNorm:0"
+  top: "ShuffleNetV2/Conv5/Relu:0"
+}
+layer {
+  name : "Mean_step_0"
+  type : "Pooling"
+  bottom: "ShuffleNetV2/Conv5/Relu:0"
+  top: "Mean:0"
+  pooling_param {
+    kernel_size_h: 7
+    kernel_size_w: 7
+    stride_h: 1
+    stride_w: 1
+    pad_n: 0
+    pad_s: 0
+    pad_w: 0
+    pad_e: 0
+    dilation_h: 1
+    dilation_w: 1
+    pool: AVE
+  }
+}
+layer {
+  name : "classifier/dense"
+  type : "InnerProduct"
+  bottom: "Mean:0"
+  top: "net_output:0"
+  inner_product_param {
+    num_output: 1000
+    bias_term: True
+  }
+}

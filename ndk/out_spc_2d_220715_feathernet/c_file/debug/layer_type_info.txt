@@ -1,0 +1,196 @@
+[{
+    name: 'conv2d_1/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['Placeholder:0'],
+    top: ['conv2d_1/Relu6:0']
+}, {
+    name: 'expanded_conv/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['conv2d_1/Relu6:0'],
+    top: ['expanded_conv/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv/depthwise/Relu6:0'],
+    top: ['expanded_conv/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_1/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_1/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_1/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_1/expand/Relu6:0'],
+    top: ['expanded_conv_1/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_1/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_1/depthwise/Relu6:0'],
+    top: ['expanded_conv_1/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_2/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_1/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_2/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_2/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_2/expand/Relu6:0'],
+    top: ['expanded_conv_2/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_2/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_2/depthwise/Relu6:0'],
+    top: ['expanded_conv_2/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_2/add',
+    type: ['eltwise'],
+    bottom: ['expanded_conv_1/project/BatchNorm/FusedBatchNorm:0', 'expanded_conv_2/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_2/add:0']
+}, {
+    name: 'expanded_conv_3/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_2/add:0'],
+    top: ['expanded_conv_3/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_3/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_3/expand/Relu6:0'],
+    top: ['expanded_conv_3/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_3/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_3/depthwise/Relu6:0'],
+    top: ['expanded_conv_3/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_4/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_3/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_4/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_4/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_4/expand/Relu6:0'],
+    top: ['expanded_conv_4/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_4/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_4/depthwise/Relu6:0'],
+    top: ['expanded_conv_4/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_4/add',
+    type: ['eltwise'],
+    bottom: ['expanded_conv_3/project/BatchNorm/FusedBatchNorm:0', 'expanded_conv_4/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_4/add:0']
+}, {
+    name: 'expanded_conv_5/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_4/add:0'],
+    top: ['expanded_conv_5/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_5/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_5/expand/Relu6:0'],
+    top: ['expanded_conv_5/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_5/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_5/depthwise/Relu6:0'],
+    top: ['expanded_conv_5/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_5/add',
+    type: ['eltwise'],
+    bottom: ['expanded_conv_4/add:0', 'expanded_conv_5/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_5/add:0']
+}, {
+    name: 'expanded_conv_6/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_5/add:0'],
+    top: ['expanded_conv_6/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_6/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_6/expand/Relu6:0'],
+    top: ['expanded_conv_6/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_6/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_6/depthwise/Relu6:0'],
+    top: ['expanded_conv_6/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_6/add',
+    type: ['eltwise'],
+    bottom: ['expanded_conv_5/add:0', 'expanded_conv_6/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_6/add:0']
+}, {
+    name: 'expanded_conv_7/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_6/add:0'],
+    top: ['expanded_conv_7/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_7/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_7/expand/Relu6:0'],
+    top: ['expanded_conv_7/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_7/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_7/depthwise/Relu6:0'],
+    top: ['expanded_conv_7/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_8/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_7/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_8/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_8/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_8/expand/Relu6:0'],
+    top: ['expanded_conv_8/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_8/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_8/depthwise/Relu6:0'],
+    top: ['expanded_conv_8/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_8/add',
+    type: ['eltwise'],
+    bottom: ['expanded_conv_7/project/BatchNorm/FusedBatchNorm:0', 'expanded_conv_8/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_8/add:0']
+}, {
+    name: 'expanded_conv_9/expand/Conv2D',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_8/add:0'],
+    top: ['expanded_conv_9/expand/Relu6:0']
+}, {
+    name: 'expanded_conv_9/depthwise/depthwise',
+    type: ['convolution', 'relu6'],
+    bottom: ['expanded_conv_9/expand/Relu6:0'],
+    top: ['expanded_conv_9/depthwise/Relu6:0']
+}, {
+    name: 'expanded_conv_9/project/Conv2D',
+    type: ['convolution'],
+    bottom: ['expanded_conv_9/depthwise/Relu6:0'],
+    top: ['expanded_conv_9/project/BatchNorm/FusedBatchNorm:0']
+}, {
+    name: 'expanded_conv_9/add',
+    type: ['eltwise'],
+    bottom: ['expanded_conv_8/add:0', 'expanded_conv_9/project/BatchNorm/FusedBatchNorm:0'],
+    top: ['expanded_conv_9/add:0']
+}, {
+    name: 'final_depthwise/depthwise',
+    type: ['convolution'],
+    bottom: ['expanded_conv_9/add:0'],
+    top: ['final_depthwise/depthwise:0']
+}, {
+    name: 'global_avg/average_pooling2d/AvgPool_step_0',
+    type: ['pooling'],
+    bottom: ['final_depthwise/depthwise:0'],
+    top: ['global_avg/average_pooling2d/AvgPool:0']
+}, {
+    name: 'fully_connected/dense',
+    type: ['innerproduct'],
+    bottom: ['global_avg/average_pooling2d/AvgPool:0'],
+    top: ['Predictions:0']
+}]

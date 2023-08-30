@@ -1,0 +1,31 @@
+[{
+    name: 'mobilenet/Conv1/Conv2D',
+    type: ['convolution', 'relu'],
+    bottom: ['Placeholder:0'],
+    top: ['mobilenet/Conv1/Relu:0']
+}, {
+    name: 'mobilenet/Conv2/Conv2D',
+    type: ['convolution', 'relu'],
+    bottom: ['mobilenet/Conv1/Relu:0'],
+    top: ['mobilenet/Conv2/Relu:0']
+}, {
+    name: 'mobilenet/Conv3/Conv2D',
+    type: ['convolution', 'relu'],
+    bottom: ['mobilenet/Conv2/Relu:0'],
+    top: ['mobilenet/Conv3/Relu:0']
+}, {
+    name: 'mobilenet/Conv4/Conv2D',
+    type: ['convolution', 'relu'],
+    bottom: ['mobilenet/Conv3/Relu:0'],
+    top: ['mobilenet/Conv4/Relu:0']
+}, {
+    name: 'mobilenet/average/depthwise',
+    type: ['convolution', 'relu'],
+    bottom: ['mobilenet/Conv4/Relu:0'],
+    top: ['mobilenet/average/Relu:0']
+}, {
+    name: 'mobilenet/logits/dense',
+    type: ['innerproduct'],
+    bottom: ['mobilenet/average/Relu:0'],
+    top: ['mobilenet/out:0']
+}]

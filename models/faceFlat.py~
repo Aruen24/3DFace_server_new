@@ -1,0 +1,108 @@
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+import tensorflow as tf
+import tensorflow.contrib.slim as slim
+from tensorflow.python.framework import ops
+from tensorflow.python.ops import control_flow_ops
+#Author: huangtao
+
+def _inverted_residual_bottleneck(inputs, depth, stride=1, expand_ratio=1, scope=None, padding='SAME', reuse=None):
+    with tf.variable_scope(scope, 'mobileNetV2', [inputs], reuse=reuse):
+        depth_in = slim.utils.last_dimension(inputs.get_shape(), min_rank=4)
+        num = int(expand_ratio*inputs.get_shape().as_list()[-1])
+        if num>512:
+            num = 512
+        output = slim.conv2d(inputs, num, 1, stride=1,
+                                  activation_fn=tf.nn.relu,  scope='conv')
+
+        output = slim.separable_conv2d(output, None, 3, depth_multiplier=1, stride=stride,
+                                  activation_fn=tf.nn.relu,  padding=padding,scope='depthwise')
+        output = slim.conv2d(output, depth, 1, stride=1,
+                                  activation_fn=None,  scope='pointwise')
+
+        if stride==1 and depth==depth_in:
+          shortcut = inputs
+          output = shortcut + output
+
+    return output
+
+
+def inference(images, keep_probability, phase_train=True,
+               weight_decay=0.0, reuse=None):
+    # batch_norm_params = {
+    #     # Decay for the moving averages.
+    #     'decay': 0.995,
+    #     # epsilon to prevent 0s in variance.
+    #     'epsilon': 0.001,
+    #     # force in-place updates of mean and variance estimates
+    #     'updates_collections': None,
+    #     # Moving averages ends up in the trainable variables collection
+    #     'variables_collections': [tf.GraphKeys.TRAINABLE_VARIABLES],
+    # }
+    batch_norm_params = {
+        'scale': True
+    }
+
+    with slim.arg_scope([slim.conv2d, slim.fully_connected, slim.separable_conv2d],
+                        weights_initializer=tf.truncated_normal_initializer(stddev=0.1),
+                        weights_regularizer=slim.l2_regularizer(weight_decay),
+                        normalizer_fn=None,
+                        normalizer_params=None):
+        return inception_resnet_v1_mobilenetV2(images, is_training=phase_train,
+                                   dropout_keep_prob=keep_probability,
+                                   reuse=reuse)
+
+
+def inception_resnet_v1_mobilenetV2(inputs, is_training=True,
+                        dropout_keep_prob=0.8,
+                        reuse=None,
+                        scope='mobilenet'):
+    """Creates the Inception Resnet V1 model.
+    Args:
+      inputs: a 4-D tensor of size [batch_size, height, width, 3].
+      num_classes: number of predicted classes.
+      is_training: whether is training or not.
+      dropout_keep_prob: float, the fraction to keep before final layer.
+      reuse: whether or not the network and its variables should be reused. To be
+        able to reuse 'scope' must be given.
+      scope: Optional variable_scope.
+    Returns:
+      logits: the logits outputs of the model.
+      end_points: the set of end_points from the inception model.
+    """
+
+
+    with tf.variable_scope(scope, 'mobilefacenet', [inputs], reuse=reuse):
+        with slim.arg_scope([slim.batch_norm, slim.dropout],
+                            is_training=is_training):
+            with slim.arg_scope([slim.conv2d, slim.max_pool2d, slim.avg_pool2d],
+                                stride=1, padding='SAME'):
+                # with  tf.device('/gpu:0'):
+                net = slim.conv2d(inputs, 8, 3, stride=2, activation_fn=tf.nn.relu, padding='SAME',scope='Conv1')  #56X48
+
+                net = _inverted_residual_bottleneck(net, 16, stride=2, expand_ratio=1, scope='Conv2')  #28X24
+                net = _inverted_residual_bottleneck(net, 32, stride=2, expand_ratio=1, scope='Conv3')   #14X12
+                # net = slim.dropout(net, dropout_keep_prob, is_training=is_training)
+                net = _inverted_residual_bottleneck(net, 64, stride=2, expand_ratio=1, scope='Conv4')   #7X6
+                # net = _inverted_residual_bottleneck(net, 128, stride=2, expand_ratio=1, scope='Conv5')  # 7X6
+                net = slim.dropout(net, dropout_keep_prob, is_training=is_training)
+
+                net = slim.separable_conv2d(net, None, net.get_shape()[1:3], depth_multiplier=1, stride=1,
+                                            activation_fn=tf.nn.relu,
+                                            padding='VALID', scope='average')
+
+                net = slim.flatten(net)
+
+                net = slim.dropout(net, dropout_keep_prob, is_training=is_training)
+
+                logits = slim.fully_connected(net, 2,
+                                              activation_fn=None,
+                                              normalizer_fn=None,
+                                              scope='logits')
+                #Predictions = slim.softmax(logits)
+                Predictions = slim.identity(net, name='out')
+
+    return logits,Predictions
